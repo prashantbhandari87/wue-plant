@@ -1,0 +1,78 @@
+analyzeWaterData <- function(water_data_path, project_code) {
+  library(tidyverse)
+
+  # Read water data from file
+  water_data <- read.csv(water_data_path, head = TRUE)
+
+  # Check for outliers in weight.before
+  check_outlier <- water_data %>%
+    filter(weight.before < 0)
+
+  if (dim(check_outlier)[1] == 0) {
+    print("No outliers in weight.before.")
+  } else {
+    print("Outliers in weight.before removed.")
+  }
+
+  # Check for outliers in weight.after
+  check_outlier <- water_data %>%
+    filter(weight.after < 0)
+
+  if (dim(check_outlier)[1] == 0) {
+    print("No outliers in weight.after.")
+  } else {
+    print("Outliers in weight.after removed.")
+  }
+
+  # Calculate water amount lost
+  water_data <- water_data %>%
+    filter(weight.before > -1) %>%
+    filter(weight.after > -1) %>%
+    group_by(plantbarcode, day, genotype, treatment, replicate) %>%
+    arrange(plantbarcode, day, genotype, treatment, replicate) %>%
+    mutate(weight.after.lag1 = lag(weight.after, 1)) %>%
+    mutate(water.amount.plus = weight.after.lag1 - weight.before) %>%
+    filter(!is.na(water.amount.plus)) %>%
+    group_by(plantbarcode, day) %>%
+    mutate(water_amount_plus_dap = sum(water.amount.plus, na.rm = TRUE))
+
+  water.join <- water_data %>%
+    select(plantbarcode, genotype, treatment, replicate, water.amount, water.amount.plus, day)
+
+  # Modify sv2 dataframe
+  sv2 <- sv2 %>%
+    mutate(day = 12 + DAP) %>%
+    select(-c(genotype, treatment, DAP))
+
+  joined1 <- left_join(water.join, sv2, by = c("plantbarcode", "day"))
+  joined1 <- distinct(joined1)
+  joined1 <- joined1 %>% filter(day != 12)
+  joined1 <- joined1 %>% filter(water.amount.plus > 0)
+  joined1 <- drop_na(joined1)
+  joined1$dailyWUE <- joined1$daily_area_diff_pred / joined1$water.amount.plus
+
+  num_na <- sum(is.na(joined1$dailyWUE))
+  if (num_na > 0) {
+    cat("There are", num_na, "NA values in joined1$dailyWUE.\n")
+  } else {
+    print("No NA values in joined1$dailyWUE.")
+  }
+
+  wue.fit.models <- joined1 %>%
+    group_by(day) %>%
+    do(mod = lm(daily_area_diff_pred ~ water.amount.plus, data = .))
+
+  m <- left_join(joined1, wue.fit.models, by = c("day"))
+
+  x <- m %>%
+    group_by(day) %>%
+    do(add_predictions(., first(.$mod), var = 'WUE.fit')) %>%
+    do(add_residuals(., first(.$mod), var = 'WUE.resid')) %>%
+    select(-c(mod))
+
+  output_file <- paste(project_code, "large_plot_file", sep = "_")
+  write.csv(x, file = output_file, row.names = FALSE)
+
+  # Return the final data frame
+  return(x)
+}
