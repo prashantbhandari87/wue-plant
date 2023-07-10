@@ -1,11 +1,25 @@
-analyzeWaterData <- function(water_data_path, project_code) {
+analyzeWaterData <- function(water_data, project_code) {
   library(tidyverse)
+  library(data.table)
 
-  # Read water data from file
-  water_data <- read.csv(water_data_path, head = TRUE)
+  # Check if the input is a data frame
+  if (is.data.frame(water_data)) {
+    water_df <- water_data
+  } else if (is.character(water_data)) {
+    # Check if the input is a CSV file
+    if (tools::file_ext(water_data) == "csv") {
+      water_df <- fread(water_data, header = TRUE,sep=",",data.table=FALSE)
+    } else {
+      message("Error: Unsupported file format")
+      return(NULL)
+    }
+  } else {
+    message("Error: Invalid input")
+    return(NULL)
+  }
 
   # Check for outliers in weight.before
-  check_outlier <- water_data %>%
+  check_outlier <- water_df %>%
     filter(weight.before < 0)
 
   if (dim(check_outlier)[1] == 0) {
@@ -15,7 +29,7 @@ analyzeWaterData <- function(water_data_path, project_code) {
   }
 
   # Check for outliers in weight.after
-  check_outlier <- water_data %>%
+  check_outlier <- water_df %>%
     filter(weight.after < 0)
 
   if (dim(check_outlier)[1] == 0) {
@@ -25,7 +39,7 @@ analyzeWaterData <- function(water_data_path, project_code) {
   }
 
   # Calculate water amount lost
-  water_data <- water_data %>%
+  water_df <- water_df %>%
     filter(weight.before > -1) %>%
     filter(weight.after > -1) %>%
     group_by(plantbarcode, day, genotype, treatment, replicate) %>%
@@ -36,7 +50,7 @@ analyzeWaterData <- function(water_data_path, project_code) {
     group_by(plantbarcode, day) %>%
     mutate(water_amount_plus_dap = sum(water.amount.plus, na.rm = TRUE))
 
-  water.join <- water_data %>%
+  water.join <- water_df %>%
     select(plantbarcode, genotype, treatment, replicate, water.amount, water.amount.plus, day)
 
   # Modify sv2 dataframe

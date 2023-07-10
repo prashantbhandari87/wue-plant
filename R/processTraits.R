@@ -1,14 +1,31 @@
 processTraits <- function(project_code, x) {
   library(tidyverse)
+  library(data.table)
+
+  # Check if the input is a data frame
+  if (is.data.frame(x)) {
+    x_df <- x
+  } else if (is.character(x)) {
+    # Check if the input is a CSV file
+    if (tools::file_ext(x) == "csv") {
+      x_df <- fread(x, data.table = FALSE, sep = ",", header = TRUE)
+    } else {
+      message("Error: Unsupported file format")
+      return(NULL)
+    }
+  } else {
+    message("Error: Invalid input")
+    return(NULL)
+  }
 
   # Remove day 12 from data frame x
-  x <- x %>% filter(day != 12)
+  x_df <- x_df %>% filter(day != 12)
 
   # Remove plantbarcode column from data frame x
-  x <- x %>% select(-c(plantbarcode))
+  x_df <- x_df %>% select(-c(plantbarcode))
 
   # Cast the data frame x using dcast function
-  castedLT <- dcast(melt(x, id.vars = c("genotype", "treatment", "day", "replicate")),
+  castedLT <- dcast(melt(x_df, id.vars = c("genotype", "treatment", "day", "replicate")),
                     ... ~ day + variable)
 
   # Filter castedLT for treatment 30 and treatment 100
@@ -21,7 +38,7 @@ processTraits <- function(project_code, x) {
   write.csv(castedLT_100, file = paste(project_code, "T100_preblup_traits", sep = "_"), row.names = FALSE)
 
   # Calculate median values
-  median.x <- aggregate(. ~ genotype + day + treatment, x, median, na.rm = TRUE)
+  median.x <- aggregate(. ~ genotype + day + treatment, x_df, median, na.rm = TRUE)
   median.x <- median.x %>% select(-c(replicate))
 
   # Cast the median.x data frame
