@@ -85,9 +85,6 @@ runPredictionAnalysis <- function(data) {
     cat("No problematic genotypes found.\n")
   }
 
-  # Filter out problematic genotypes from sv2.30 and sv2.100
-  sv2.30 <- sv2.30 %>% filter(!genotype %in% problematic_genotypes)
-  sv2.100 <- sv2.100 %>% filter(!genotype %in% problematic_genotypes)
 
   # Create dataframes from predictions and set column names dynamically
   predictions.30 <- as.data.frame(cbind(sv2.30, unlist(predictions.30)))
@@ -95,6 +92,10 @@ runPredictionAnalysis <- function(data) {
 
   predictions.100 <- as.data.frame(cbind(sv2.100, unlist(predictions.100)))
   colnames(predictions.100)[ncol(predictions.100)] <- "predicted_area_pixels"
+
+  # Filter out problematic genotypes from sv2.30 and sv2.100
+  predictions.30 <- predictions.30 %>% filter(!genotype %in% problematic_genotypes)
+  predictions.100 <- predictions.100 %>% filter(!genotype %in% problematic_genotypes)
 
   # Calculate daily area difference for predictions.30
   predictions.30 <- predictions.30 %>%
@@ -131,3 +132,4 @@ runPredictionAnalysis <- function(data) {
   # Return the final processed dataframe
   return(data)
 }
+
