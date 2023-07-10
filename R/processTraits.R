@@ -11,9 +11,7 @@
 #' @import tidyverse
 #' @import data.table
 #'
-#' @examples
-#' processTraits(project_code = "project001", x = my_traits_data)
-#' processTraits(project_code = "project001", x = "path/to/traits_data.csv")
+
 processTraits <- function(project_code, x) {
   library(tidyverse)
   library(data.table)
@@ -66,7 +64,8 @@ processTraits <- function(project_code, x) {
   median.x.LT.100 <- median.x.LT %>% filter(treatment == 100)
 
   # Write the results to CSV files
-  write.csv(median.x.LT, file = paste(project_code, "median_traits", sep = "_"), row.names = FALSE)
-  write.csv(median.x.LT.30, file = paste(project_code, "T30_median_traits", sep = "_"), row.names = FALSE)
-  write.csv(median.x.LT.100, file = paste(project_code, "T100_median_traits", sep = "_"), row.names = FALSE)
+  write.csv(median.x.LT, file = paste(project_code, "median_traits.csv", sep = "_"), row.names = FALSE)
+  write.csv(median.x.LT.30, file = paste(project_code, "T30_median_traits.csv", sep = "_"), row.names = FALSE)
+  write.csv(median.x.LT.100, file = paste(project_code, "T100_median_traits.csv", sep = "_"), row.names = FALSE)
+  print("Files written out!")
 }

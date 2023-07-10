@@ -16,8 +16,7 @@
 #' @import patchwork
 #' @import naniar
 #'
-#' @examples
-#' processData(sv_file = "path/to/sv_file.csv", project_code = "proj1")
+
 processData <- function(sv_file, project_code) {
   library(pcvr)
   library(data.table)

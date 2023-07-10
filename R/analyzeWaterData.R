@@ -11,10 +11,8 @@
 #' @import tidyverse
 #' @import data.table
 #'
-#' @examples
-#' analyzeWaterData(water_data = my_water_data, project_code = "project001")
-#' analyzeWaterData(water_data = "path/to/water_data.csv", project_code = "project001")
-analyzeWaterData <- function(water_data, project_code) {
+
+analyzeWaterData <- function(water_data, predicted_pcv_data, project_code) {
   library(tidyverse)
   library(data.table)
 
@@ -70,7 +68,7 @@ analyzeWaterData <- function(water_data, project_code) {
     select(plantbarcode, genotype, treatment, replicate, water.amount, water.amount.plus, day)
 
   # Modify sv2 dataframe
-  sv2 <- sv2 %>%
+  sv2 <- predicted_pcv_data %>%
     mutate(day = 12 + DAP) %>%
     select(-c(genotype, treatment, DAP))
 
@@ -100,7 +98,7 @@ analyzeWaterData <- function(water_data, project_code) {
     do(add_residuals(., first(.$mod), var = 'WUE.resid')) %>%
     select(-c(mod))
 
-  output_file <- paste(project_code, "large_plot_file", sep = "_")
+  output_file <- paste(project_code, "large_plot_file.csv", sep = "_")
   write.csv(x, file = output_file, row.names = FALSE)
 
   # Return the final data frame
