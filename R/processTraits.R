@@ -1,3 +1,19 @@
+#' Process Traits
+#'
+#' This function processes traits data provided as a data frame or a CSV file.
+#'
+#' @param project_code Project code for naming the output files.
+#' @param x Traits data, either a data frame or a CSV file.
+#'
+#' @return Processed data frames with traits analysis results.
+#' @export
+#'
+#' @import tidyverse
+#' @import data.table
+#'
+#' @examples
+#' processTraits(project_code = "project001", x = my_traits_data)
+#' processTraits(project_code = "project001", x = "path/to/traits_data.csv")
 processTraits <- function(project_code, x) {
   library(tidyverse)
   library(data.table)

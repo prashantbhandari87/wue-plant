@@ -1,3 +1,23 @@
+#' Process SV File
+#'
+#' This function processes an SV file and performs various data manipulations and calculations.
+#'
+#' @param sv_file Path to the SV file.
+#' @param project_code Code for the project.
+#'
+#' @return A processed data frame containing the calculated values.
+#' @export
+#'
+#' @import pcvr
+#' @import data.table
+#' @import tidyverse
+#' @import lubridate
+#' @import modelr
+#' @import patchwork
+#' @import naniar
+#'
+#' @examples
+#' processData(sv_file = "path/to/sv_file.csv", project_code = "proj1")
 processData <- function(sv_file, project_code) {
   library(pcvr)
   library(data.table)

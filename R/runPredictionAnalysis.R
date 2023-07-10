@@ -8,7 +8,7 @@ runPredictionAnalysis <- function(data) {
   } else if (is.character(data)) {
     # Check if the input is a CSV file
     if (tools::file_ext(data) == "csv") {
-      sv2 <- fread(data,sep=",",header = TRUE,data.table = FALSE)
+      sv2 <- fread(data, sep = ",", header = TRUE, data.table = FALSE)
     } else {
       message("Error: Unsupported file format")
       return(NULL)
@@ -60,6 +60,9 @@ runPredictionAnalysis <- function(data) {
   } else {
     cat("No problematic genotypes found.\n")
   }
+
+  # Add predicted_area_pixels as a new column with NA as default value
+  sv2 <- sv2 %>% mutate(predicted_area_pixels = NA_real_)
 
   # Update sv2 with predictions
   for (i in seq_along(predictions)) {

@@ -1,3 +1,19 @@
+#' Analyze Water Data
+#'
+#' This function analyzes water data provided as a data frame or a CSV file.
+#'
+#' @param water_data Water data, either a data frame or a CSV file.
+#' @param project_code Project code for naming the output file.
+#'
+#' @return Processed data frame with water analysis results.
+#' @export
+#'
+#' @import tidyverse
+#' @import data.table
+#'
+#' @examples
+#' analyzeWaterData(water_data = my_water_data, project_code = "project001")
+#' analyzeWaterData(water_data = "path/to/water_data.csv", project_code = "project001")
 analyzeWaterData <- function(water_data, project_code) {
   library(tidyverse)
   library(data.table)
