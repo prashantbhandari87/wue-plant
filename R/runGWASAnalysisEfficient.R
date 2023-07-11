@@ -10,6 +10,10 @@
 #' @param projectCode The project code to use for the output file names.
 #'
 #' @return None.
+#' @export
+#'
+#' @import bigsnpr
+#' @import tidyverse
 runGWASAnalysisEfficient <- function(bedfile, famFile, phenoFile, phenoCols, projectCode) {
   library(bigsnpr)
   library(tidyverse)

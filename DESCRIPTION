@@ -17,4 +17,5 @@ Imports:
   naniar,
   patchwork,
   pcvr,
-  tidyverse
+  tidyverse,
+  bigsnpr
