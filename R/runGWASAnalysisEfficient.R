@@ -42,6 +42,9 @@ runGWASAnalysisEfficient <- function(bedfile, famFile, phenoFile, phenoCols, pro
   # Read phenotype data
   pheno <- read.csv(phenoFile, header = TRUE)
   colnames(pheno)[1] <- "genotype"
+  pheno <- pheno %>%
+    select_if(~ n_distinct(.) >= 50)
+
   fam <- read.table(famFile, sep = "\t", header = FALSE)
   colnames(fam)[2] <- "genotype"
   fam <- fam %>% select(genotype)
@@ -56,6 +59,7 @@ runGWASAnalysisEfficient <- function(bedfile, famFile, phenoFile, phenoCols, pro
   # Perform GWAS analysis for each phenotype column
   for (col in phenoCols) {
     y <- obj.bigSNP$fam[[col]]
+
     ind.gwas <- which(!is.na(y) & complete.cases(covar))
 
     gwas <- big_univLinReg(G, y[ind.gwas], ind.train = ind.gwas, covar.train = covar[ind.gwas, ], ncores = nb_cores())
@@ -67,9 +71,9 @@ runGWASAnalysisEfficient <- function(bedfile, famFile, phenoFile, phenoCols, pro
     out <- as.data.frame(cbind(CHR,POS,obj.gwas.gc))
     out <- out %>% filter(-log10(score)>5)
     write.csv(out,res_file,row.names = FALSE)
-
-
   }
+
+
   print("Files written out!")
 
 }
