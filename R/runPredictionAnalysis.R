@@ -7,7 +7,7 @@
 #' @export
 runPredictionAnalysis <- function(data) {
   library(tidyverse)
-
+  ########
   # Load data if a CSV file path is provided
   if (is.character(data) && tolower(file_ext(data)) == ".csv") {
     if (!file.exists(data)) {
@@ -16,6 +16,76 @@ runPredictionAnalysis <- function(data) {
     data <- read.csv(data)
   }
 
+  # Convert 'area.pixels' to numeric
+  if (!"area.pixels" %in% colnames(data)) {
+    stop("The 'area.pixels' column does not exist in the provided data.")
+  }
+  data$area.pixels <- as.numeric(data$area.pixels)
+
+  # Filter data for treatment == 30
+  sv2.30 <- data %>% filter(treatment == 30)
+
+  # Filter data for treatment == 100
+  sv2.100 <- data %>% filter(treatment == 100)
+
+  # Get unique genotypes
+  genotypes <- unique(data$genotype)
+
+  # List to store loess fits
+  loess_fits <- list()
+
+  # List to store predictions
+  predictions <- list()
+
+  # Subset the data by genotype and fit loess models
+  genotype_subset <- function(geno, data) {
+    subset_data <- subset(data, genotype == geno)
+    subset_data$area.pixels <- as.numeric(subset_data$area.pixels)
+
+    loess_fit <- loess(area.pixels ~ DAP, data = subset_data, span = 1)
+    predicted_values <- predict(loess_fit, newdata = subset_data)
+
+    return(predicted_values)
+  }
+
+  # Empty list to store problematic genotypes
+  problematic_genotypes <- c()
+
+  # Apply the function for each genotype using lapply for treatment == 30
+  predictions.30 <- lapply(genotypes, function(geno) {
+    tryCatch(
+      {
+        genotype_subset(geno, data = sv2.30)
+      },
+      error = function(e) {
+        problematic_genotypes <<- c(problematic_genotypes, geno)
+        NULL
+      }
+    )
+  })
+
+  # Apply the function for each genotype using lapply for treatment == 100
+  predictions.100 <- lapply(genotypes, function(geno) {
+    tryCatch(
+      {
+        genotype_subset(geno, data = sv2.100)
+      },
+      error = function(e) {
+        problematic_genotypes <<- c(problematic_genotypes, geno)
+        NULL
+      }
+    )
+  })
+
+  # Print the problematic genotypes
+  if (length(problematic_genotypes) > 0) {
+    cat("The following genotypes caused an error:\n")
+    print(problematic_genotypes)
+  } else {
+    cat("No problematic genotypes found.\n")
+  }
+
+  data <- data %>% filter(!genotype %in% problematic_genotypes)
   # Convert 'area.pixels' to numeric
   if (!"area.pixels" %in% colnames(data)) {
     stop("The 'area.pixels' column does not exist in the provided data.")
@@ -140,5 +210,6 @@ runPredictionAnalysis <- function(data) {
 
   # Return the final processed dataframe
   return(data)
+
 }
 
