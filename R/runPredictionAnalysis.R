@@ -87,10 +87,13 @@ runPredictionAnalysis <- function(data) {
 
 
   # Create dataframes from predictions and set column names dynamically
-  predictions.30 <- as.data.frame(cbind(sv2.30, unlist(predictions.30)))
+  # Combine data frames using bind_cols() instead of cbind()
+  predictions.30 <- bind_cols(sv2.30, as.data.frame(unlist(predictions.30)))
   colnames(predictions.30)[ncol(predictions.30)] <- "predicted_area_pixels"
 
-  predictions.100 <- as.data.frame(cbind(sv2.100, unlist(predictions.100)))
+  # Combine data frames using bind_cols() instead of cbind()
+  predictions.100 <- bind_cols(sv2.100, as.data.frame(unlist(predictions.100)))
+
   colnames(predictions.100)[ncol(predictions.100)] <- "predicted_area_pixels"
 
   # Filter out problematic genotypes from sv2.30 and sv2.100
