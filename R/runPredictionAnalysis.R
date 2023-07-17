@@ -42,7 +42,7 @@ runPredictionAnalysis <- function(data) {
     subset_data <- subset(data, genotype == geno)
     subset_data$area.pixels <- as.numeric(subset_data$area.pixels)
 
-    loess_fit <- loess(area.pixels ~ DAP, data = subset_data, span = 1)
+    loess_fit <- loess(area.pixels ~ DAP, data = subset_data, span = 0.57)
     predicted_values <- predict(loess_fit, newdata = subset_data)
 
     return(predicted_values)
@@ -112,7 +112,7 @@ runPredictionAnalysis <- function(data) {
     subset_data <- subset(data, genotype == geno)
     subset_data$area.pixels <- as.numeric(subset_data$area.pixels)
 
-    loess_fit <- loess(area.pixels ~ DAP, data = subset_data, span = 1)
+    loess_fit <- loess(area.pixels ~ DAP, data = subset_data, span = 0.57)
     predicted_values <- predict(loess_fit, newdata = subset_data)
 
     return(predicted_values)
