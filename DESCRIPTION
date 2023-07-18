@@ -18,4 +18,5 @@ Imports:
   patchwork,
   pcvr,
   tidyverse,
-  bigsnpr
+  bigsnpr,
+  stringr
