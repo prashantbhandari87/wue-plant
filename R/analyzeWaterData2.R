@@ -24,7 +24,7 @@ analyzeWaterData2 <- function(water_data, predicted_pcv_data, project_code) {
     if (tools::file_ext(water_data) == "csv") {
       water_df <- fread(water_data, header = TRUE,sep=",",data.table=FALSE)
       #water_df$genotype <- substr(water_df$plantbarcode, 3,5)
-      #water_df$treatment <- substr(water_df$plantbarcode, 6, 7)
+      water_df$treatment <- substr(water_df$plantbarcode, 6, 7)
       water_df$treatment <- ifelse(water_df$treatment == "AA", "100",
                                    ifelse(water_df$treatment == "AB", "30", "0"))
     } else {

@@ -45,7 +45,26 @@ runGWASAnalysisEfficient <- function(bedfile, famFile, phenoFile, phenoCols, pro
   pheno <- pheno %>%
     select_if(~ n_distinct(.) >= 50)
 
-  fam <- read.table(famFile, sep = "\t", header = FALSE)
+  read_tab_or_space_sep <- function(file_path) {
+    con <- file(file_path, "r")
+    first_line <- readLines(con, n = 1)
+    close(con)
+
+    if (grepl("\t", first_line)) {
+      # Read the file with tab as separator
+      data <- read.table(file_path, sep = "\t", header = FALSE, fill = TRUE)
+    } else if (grepl(" ", first_line)) {
+      # Read the file with space as separator
+      data <- read.table(file_path, sep = " ", header = FALSE, fill = TRUE)
+    } else {
+      stop("File is not separated by either tabs or spaces.")
+    }
+
+    return(data)
+  }
+
+  fam <- read_tab_or_space_sep(famFile)
+
   colnames(fam)[2] <- "genotype"
   fam <- fam %>% select(genotype)
   pheno <- left_join(fam, pheno, by = "genotype")
