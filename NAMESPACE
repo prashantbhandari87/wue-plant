@@ -2,6 +2,7 @@
 
 export(analyzeWaterData)
 export(analyzeWaterData2)
+export(analyzeWaterDataFixed)
 export(createProjectFolders)
 export(processData)
 export(processTraits)
