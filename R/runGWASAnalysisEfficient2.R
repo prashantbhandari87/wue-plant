@@ -14,7 +14,8 @@
 #'
 #' @import bigsnpr
 #' @import tidyverse
-function (bedfile, famFile, phenoFile, phenoCols, projectCode) {
+#'
+runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, projectCode) {
   library(bigsnpr)
   library(tidyverse)
   tmpfile <- tempfile()
