@@ -19,4 +19,8 @@ Imports:
   pcvr,
   tidyverse,
   bigsnpr,
-  stringr
+  stringr,
+  doParallel,
+  foreach,
+  ggsci,
+  lme4
