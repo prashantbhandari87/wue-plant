@@ -171,13 +171,18 @@ runPredictionAnalysis <- function(data) {
   predictions.100 <- predictions.100 %>% filter(!genotype %in% problematic_genotypes)
 
   # Calculate daily area difference for predictions.30
-  predictions.30 <- predictions.30 %>%
+  dda.30 <- predictions.30 %>%
+    group_by(genotype,DAP) %>% select(genotype,DAP, predicted_area_pixels) %>%
+    distinct() %>%
+    group_by(genotype) %>%
+    arrange(genotype,DAP) %>%
     mutate(daily_area_diff_pred = predicted_area_pixels - lag(predicted_area_pixels, default = 0)) %>%
-    mutate(daily_area_diff_pred = if_else(daily_area_diff_pred < 0, NA_real_, daily_area_diff_pred)) %>%
-    mutate(out=predicted_area_pixels-
-             lag(predicted_area_pixels,default=0)) %>%
-    mutate(daily_area_diff_pred = if_else(out<0,NA_real_,daily_area_diff_pred)) %>%
+    mutate(daily_area_diff_pred = if_else(daily_area_diff_pred <  0, NA_real_, daily_area_diff_pred)) %>%
+    mutate(out = predicted_area_pixels - lag(predicted_area_pixels, default = 0)) %>%
+    mutate(daily_area_diff_pred = if_else(out <  0, NA_real_, daily_area_diff_pred)) %>%
     select(-c(out))
+
+  predictions.30 <- left_join(predictions.30, dda, by=c("genotype","DAP"))
 
   # Check if areas are shrinking in predictions.30
   if (predictions.30$daily_area_diff_pred %>% is.na() %>% sum() == 0) {
@@ -188,13 +193,19 @@ runPredictionAnalysis <- function(data) {
   }
 
   # Calculate daily area difference for predictions.100
-  predictions.100 <- predictions.100 %>%
+  dda.100 <- predictions.100 %>%
+    group_by(genotype,DAP) %>% select(genotype,DAP, predicted_area_pixels) %>%
+    distinct() %>%
+    group_by(genotype) %>%
+    arrange(genotype,DAP) %>%
     mutate(daily_area_diff_pred = predicted_area_pixels - lag(predicted_area_pixels, default = 0)) %>%
-    mutate(daily_area_diff_pred = if_else(daily_area_diff_pred < 0, NA_real_, daily_area_diff_pred)) %>%
-    mutate(out=predicted_area_pixels-
-             lag(predicted_area_pixels,default=0)) %>%
-    mutate(daily_area_diff_pred = if_else(out<0,NA_real_,daily_area_diff_pred)) %>%
+    mutate(daily_area_diff_pred = if_else(daily_area_diff_pred <  0, NA_real_, daily_area_diff_pred)) %>%
+    mutate(out = predicted_area_pixels - lag(predicted_area_pixels, default = 0)) %>%
+    mutate(daily_area_diff_pred = if_else(out <  0, NA_real_, daily_area_diff_pred)) %>%
     select(-c(out))
+
+  predictions.100 <- left_join(predictions.100, dda.100, by=c("genotype","DAP"))
+
 
   # Check if areas are shrinking in predictions.100
   if (predictions.100$daily_area_diff_pred %>% is.na() %>% sum() == 0) {
