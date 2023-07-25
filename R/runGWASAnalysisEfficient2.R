@@ -75,8 +75,8 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     res_file <- paste0(projectCode, colnames(pheno2)[col],
                        "_gwas.csv")
     rds_file <- paste0(projectCode, colnames(pheno2)[col],
-                       "_gwas.rds")
-    saveRDS(obj.gwas.gc, file = rds_file)
+                       "_gwas.rds.gz")
+    saveRDS(obj.gwas.gc, file = rds_file,compress =TRUE )
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out <- out %>% filter(-log10(score) > 5)
     write.csv(out, res_file, row.names = FALSE)
