@@ -80,7 +80,8 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out <- out %>% filter(-log10(score) > 5)
     write.csv(out, res_file, row.names = FALSE)
-    unlink(paste0(tmpfile, "*"))
+    gzip(out)
+    file.remove(out)
   }
   print("Files written out!")
 }
