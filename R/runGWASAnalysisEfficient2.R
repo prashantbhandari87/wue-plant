@@ -21,6 +21,8 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
   tmpfile <- tempfile()
   snp_readBed(bedfile, backingfile = tmpfile)
   obj.bigSNP <- snp_attach(paste0(tmpfile, ".rds"))
+
+
   G <- obj.bigSNP$genotypes
   CHR <- obj.bigSNP$map$chromosome
   POS <- obj.bigSNP$map$physical.pos
@@ -82,5 +84,9 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     write.csv(out, file=gzfile(res_file))
 
   }
+  # Free up memory and remove unnecessary objects
+  unlink(tmpfile)
+  rm(tmpfile, obj.bigSNP, G, CHR, POS, ind.excl, ind.keep, obj.svd, PC, covar, pheno, fam, pheno2, gwas, obj.gwas.gc, out)
+
   print("Files written out!")
 }
