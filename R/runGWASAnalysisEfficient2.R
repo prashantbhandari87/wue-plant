@@ -84,14 +84,14 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
                        "_gwas.arrow")
 
     out1 <- arrow_table(obj.gwas.gc)
-    write_dataset(out1, "rds_file", partitioning = c("CHR"))
+    write_dataset(out1, rds_file, partitioning = c("CHR"))
 
     unlink(rds_file)
 
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out <- out %>% filter(-log10(score) > 5)
     out <- arrow_table(out)
-    write_dataset(out1, "res_file", partitioning = c("CHR"))
+    write_dataset(out1, res_file, partitioning = c("CHR"))
 
 
   }

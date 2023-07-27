@@ -23,4 +23,5 @@ Imports:
   doParallel,
   foreach,
   ggsci,
-  lme4
+  lme4,
+  arrow
