@@ -18,6 +18,8 @@
 runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, projectCode) {
   library(bigsnpr)
   library(tidyverse)
+  library(arrow)
+
   tmpfile <- tempfile()
   snp_readBed(bedfile, backingfile = tmpfile)
   obj.bigSNP <- snp_attach(paste0(tmpfile, ".rds"))
@@ -79,13 +81,18 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     res_file <- paste0(projectCode, colnames(pheno2)[col],
                        "_gwas.csv")
     rds_file <- paste0(projectCode, colnames(pheno2)[col],
-                       "_gwas.rds.gz")
-    saveRDS(obj.gwas.gc, file = rds_file)
+                       "_gwas.arrow")
+
+    out1 <- arrow_table(obj.gwas.gc)
+    write_dataset(out1, "rds_file", partitioning = c("CHR"))
+
     unlink(rds_file)
 
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out <- out %>% filter(-log10(score) > 5)
-    write.csv(out, file=gzfile(res_file))
+    out <- arrow_table(out)
+    write_dataset(out1, "res_file", partitioning = c("CHR"))
+
 
   }
   # Free up memory and remove unnecessary objects
