@@ -69,6 +69,8 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
         pcs_to_include = c(pcs_to_include, j)
       }
     }
+    paste0(pcs_to_include,"included for GWAS of", colnames(y[ind.gwas]))
+
     #covar <- PC[, pcs_to_include]
     gwas <- big_univLinReg(G, y[ind.gwas], ind.train = ind.gwas,
                            covar.train = PC[, pcs_to_include][ind.gwas, ],
@@ -79,7 +81,6 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     rds_file <- paste0(projectCode, colnames(pheno2)[col],
                        "_gwas.rds.gz")
     saveRDS(obj.gwas.gc, file = rds_file)
-    system(paste("xz -9", rds_file))
     unlink(rds_file)
 
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
@@ -89,7 +90,7 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
   }
   # Free up memory and remove unnecessary objects
   unlink(tmpfile)
-  rm(tmpfile, obj.bigSNP, G, CHR, POS, ind.excl, ind.keep, obj.svd, PC, covar, pheno, fam, pheno2, gwas, obj.gwas.gc, out)
+  rm(tmpfile,obj.gwas.gc, out)
 
   print("Files written out!")
 }

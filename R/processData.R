@@ -51,6 +51,7 @@ processData <- function(sv_file, project_code) {
     sv <- bw.time(sv, plantingDelay = 0, phenotype = "area.pixels", cutoff = 10,
                   timeCol = "timestamp", group = c("plantbarcode", "rotation"), plot = FALSE)
 
+
     sv <- bw.outliers(sv, phenotype = "area.pixels", group = c("DAP", "genotype", "treatment"),
                       plotgroup = c("plantbarcode", "rotation"))
 
@@ -67,6 +68,7 @@ processData <- function(sv_file, project_code) {
     form <- as.formula(paste0(phenoForm, "~", groupForm))
 
     sv <- aggregate(form, data = sv, mean, na.rm = TRUE)
+
 
     return(sv)
   }, error = function(e) {
