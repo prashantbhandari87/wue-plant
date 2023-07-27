@@ -71,7 +71,8 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
         pcs_to_include = c(pcs_to_include, j)
       }
     }
-    paste0(pcs_to_include,"included for GWAS of", colnames(y[ind.gwas]))
+
+    print(paste0(length(pcs_to_include),"PCS added for column number",col, sep=" "))
 
     #covar <- PC[, pcs_to_include]
     gwas <- big_univLinReg(G, y[ind.gwas], ind.train = ind.gwas,
@@ -83,12 +84,10 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     rds_file <- paste0(projectCode, colnames(pheno2)[col],
                        "_gwas.arrow")
 
-    out1 <- arrow_table(obj.gwas.gc)
+    out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
+    out1 <- arrow_table(out)
     write_dataset(out1, rds_file, partitioning = c("CHR"))
 
-    unlink(rds_file)
-
-    out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out <- out %>% filter(-log10(score) > 5)
     out <- arrow_table(out)
     write_dataset(out1, res_file, partitioning = c("CHR"))
