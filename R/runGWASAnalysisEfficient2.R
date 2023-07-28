@@ -93,7 +93,6 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     write_dataset(out1, res_file, partitioning = c("CHR"))
 
     unlink(tmpfile)
-    rm(tmpfile,obj.gwas.gc, out)
 
   }
   # Free up memory and remove unnecessary objects
