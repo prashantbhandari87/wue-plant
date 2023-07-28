@@ -88,11 +88,6 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
     out1 <- arrow_table(out)
     write_dataset(out1, rds_file, partitioning = c("CHR"))
 
-    out <- out %>% filter(-log10(score) > 5)
-    out <- arrow_table(out)
-    write_dataset(out1, res_file, partitioning = c("CHR"))
-
-    unlink(tmpfile)
 
   }
   # Free up memory and remove unnecessary objects
