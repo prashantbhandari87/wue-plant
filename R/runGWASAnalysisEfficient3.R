@@ -87,7 +87,8 @@ runGWASAnalysisEfficient3 <- function (bedfile, famFile, phenoFile, phenoCols, p
 
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out$id <- paste0(CHR,":",POS)
-    out$trait <- out$colnames(pheno2)[col]
+    out$trait <- colnames(pheno2)[col]
+    out$pvalue <- -log10(out$score)
     out1 <- arrow_table(out)
     write_dataset(out1, rds_file, partitioning = c("CHR"))
 
