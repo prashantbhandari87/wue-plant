@@ -1,4 +1,4 @@
-#' Run GWAS analysis efficiently
+#' Run GWAS analysis efficiently. this is for aws cluster
 #'
 #' This function reads genotype data from a bed/bim/fam file, performs GWAS
 #' analysis for each phenotype column, and writes the results to CSV files.

@@ -1,4 +1,4 @@
-#' Run GWAS analysis efficiently
+#' Run GWAS analysis efficiently. this is for my PC.
 #'
 #' This function reads genotype data from a bed/bim/fam file, performs GWAS
 #' analysis for each phenotype column, and writes the results to CSV files.
@@ -85,6 +85,9 @@ runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, p
                        "_gwas.arrow")
 
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
+    order1 <- order(CHR, POS)
+    out$pvalue <- stats::predict(obj.gwas.gc)[order1]
+
     out1 <- arrow_table(out)
     write_dataset(out1, rds_file, partitioning = c("CHR"))
 
