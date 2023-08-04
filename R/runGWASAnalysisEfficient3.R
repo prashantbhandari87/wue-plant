@@ -88,7 +88,8 @@ runGWASAnalysisEfficient3 <- function (bedfile, famFile, phenoFile, phenoCols, p
     out <- as.data.frame(cbind(CHR, POS, obj.gwas.gc))
     out$id <- paste0(CHR,":",POS)
     out$trait <- colnames(pheno2)[col]
-    out$pvalue <- -log10(out$score)
+    order1 <- order(CHR, POS)
+    out$pvalue <- stats::predict(obj.gwas.gc)[order1]
     out1 <- arrow_table(out)
     write_dataset(out1, rds_file, partitioning = c("CHR"))
 
