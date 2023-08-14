@@ -6,7 +6,6 @@
 #' @return The processed dataframe after prediction analysis.
 #' @export
 runPredictionAnalysis<-function (data) {
-  library(tidyverse)
   if (is.character(data) && tolower(file_ext(data)) == ".csv") {
     if (!file.exists(data)) {
       stop("The specified CSV file does not exist.")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/runGWASAnalysisEfficient2.R
 \name{runGWASAnalysisEfficient2}
 \alias{runGWASAnalysisEfficient2}
-\title{Run GWAS analysis efficiently}
+\title{Run GWAS analysis efficiently. this is for my PC.}
 \usage{
 runGWASAnalysisEfficient2(bedfile, famFile, phenoFile, phenoCols, projectCode)
 }

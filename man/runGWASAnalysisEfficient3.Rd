@@ -2,7 +2,7 @@
 % Please edit documentation in R/runGWASAnalysisEfficient3.R
 \name{runGWASAnalysisEfficient3}
 \alias{runGWASAnalysisEfficient3}
-\title{Run GWAS analysis efficiently}
+\title{Run GWAS analysis efficiently. this is for aws cluster}
 \usage{
 runGWASAnalysisEfficient3(bedfile, famFile, phenoFile, phenoCols, projectCode)
 }

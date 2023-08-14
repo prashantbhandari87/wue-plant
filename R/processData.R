@@ -18,13 +18,7 @@
 #'
 
 processData <- function(sv_file, project_code) {
-  library(pcvr)
-  library(data.table)
-  library(tidyverse)
-  library(lubridate)
-  library(modelr)
-  library(patchwork)
-  library(naniar)
+
 
   tryCatch({
     sv <- read.pcv(sv_file, mode = "wide", singleValueOnly = TRUE, reader = "fread")

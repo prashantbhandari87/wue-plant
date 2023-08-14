@@ -16,9 +16,7 @@
 #' @import tidyverse
 #'
 runGWASAnalysisEfficient2 <- function (bedfile, famFile, phenoFile, phenoCols, projectCode) {
-  library(bigsnpr)
-  library(tidyverse)
-  library(arrow)
+
 
   tmpfile <- tempfile()
   snp_readBed(bedfile, backingfile = tmpfile)

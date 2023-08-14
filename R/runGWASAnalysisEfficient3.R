@@ -16,10 +16,7 @@
 #' @import tidyverse
 #'
 runGWASAnalysisEfficient3 <- function (bedfile, famFile, phenoFile, phenoCols, projectCode) {
-  library(bigsnpr)
-  library(tidyverse)
-  library(arrow)
-  library(here)
+
 
   obj.bigSNP <- snp_attach(list.files(here("gwas/rawdata/"),
                                       pattern = "\\.rds$",

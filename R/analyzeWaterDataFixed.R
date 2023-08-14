@@ -13,8 +13,7 @@
 #'
 
 analyzeWaterDataFixed <- function (water_data, predicted_pcv_data, project_code) {
-  library(tidyverse)
-  library(data.table)
+
   if (is.data.frame(water_data)) {
     water_df <- water_data
   }

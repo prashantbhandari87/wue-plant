@@ -13,8 +13,7 @@
 #'
 
 processTraits <- function(project_code, x) {
-  library(tidyverse)
-  library(data.table)
+
 
   # Check if the input is a data frame
   if (is.data.frame(x)) {

@@ -16,8 +16,6 @@
 #'
 
 read_and_process_csv <- function(csv_dir, pattern) {
-  library(data.table)
-  library(stringr)
 
   # Get a list of matching CSV files in the directory
   csv_files <- list.files(csv_dir, pattern = pattern,
