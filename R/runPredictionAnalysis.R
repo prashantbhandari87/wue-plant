@@ -5,7 +5,9 @@
 #' @param data A dataframe or the path to a CSV file containing the data.
 #' @return The processed dataframe after prediction analysis.
 #' @export
-runPredictionAnalysis<-function (data) {
+#' @importFrom memoise memoise
+
+.runPredictionAnalysis<-function (data) {
   if (is.character(data) && tolower(file_ext(data)) == ".csv") {
     if (!file.exists(data)) {
       stop("The specified CSV file does not exist.")
@@ -148,3 +150,4 @@ runPredictionAnalysis<-function (data) {
   return(data)
 }
 
+runPredictionAnalysis <- memoise::memoise(.runPredictionAnalysis)

@@ -10,9 +10,9 @@
 #'
 #' @import tidyverse
 #' @import data.table
-#'
+#' @importFrom memoise memoise
 
-analyzeWaterData <- function(water_data, predicted_pcv_data, project_code) {
+.analyzeWaterData <- function(water_data, predicted_pcv_data, project_code) {
 
 
   # Check if the input is a data frame
@@ -102,3 +102,5 @@ analyzeWaterData <- function(water_data, predicted_pcv_data, project_code) {
   write.csv(x, file = output_file, row.names = FALSE)
   return(x)
 }
+
+analyzeWaterData <- memoise::memoise(.analyzeWaterData)

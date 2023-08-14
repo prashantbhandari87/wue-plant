@@ -15,9 +15,9 @@
 #' @import modelr
 #' @import patchwork
 #' @import naniar
-#'
+#' @importFrom memoise memoise
 
-processData <- function(sv_file, project_code) {
+.processData <- function(sv_file, project_code) {
 
 
   tryCatch({
@@ -70,3 +70,5 @@ processData <- function(sv_file, project_code) {
     return(NULL)
   })
 }
+
+processData <- memoise::memoise(.processData)

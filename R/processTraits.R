@@ -10,9 +10,9 @@
 #'
 #' @import tidyverse
 #' @import data.table
-#'
+#' @importFrom memoise memoise
 
-processTraits <- function(project_code, x) {
+.processTraits <- function(project_code, x) {
 
 
   # Check if the input is a data frame
@@ -68,3 +68,5 @@ processTraits <- function(project_code, x) {
   write.csv(median.x.LT.100, file = paste(project_code, "T100_median_traits.csv", sep = "_"), row.names = FALSE)
   print("Files written out!")
 }
+
+processTraits <- memoise::memoise(.processTraits)
