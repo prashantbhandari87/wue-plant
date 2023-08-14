@@ -24,4 +24,5 @@ Imports:
   foreach,
   ggsci,
   lme4,
-  arrow
+  arrow,
+  memoise

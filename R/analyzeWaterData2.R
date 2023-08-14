@@ -103,4 +103,4 @@
   return(x)
 }
 
-analyzeWaterData2 <- memoise::memoise(analyzeWaterData2)
+analyzeWaterData2 <- memoise::memoise(.analyzeWaterData2)
