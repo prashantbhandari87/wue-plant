@@ -10,9 +10,8 @@
 #'
 #' @import tidyverse
 #' @import data.table
-#' @importFrom memoise memoise
 
-.analyzeWaterDataFixed <- function (water_data, predicted_pcv_data, project_code) {
+analyzeWaterDataFixed <- function (water_data, predicted_pcv_data, project_code) {
 
   if (is.data.frame(water_data)) {
     water_df <- water_data
@@ -97,4 +96,3 @@
   return(x)
 }
 
-analyzeWaterDataFixed <- memoise::memoise(.analyzeWaterDataFixed)

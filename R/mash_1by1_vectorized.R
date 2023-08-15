@@ -10,10 +10,9 @@
 #' @return A list containing posterior matrices and log likelihood.
 #' @export
 #'
-#' @importFrom memoise memoise
 
 
-.mash_1by1_vectorized <- function(data, alpha = 0, ...) {
+mash_1by1_vectorized <- function(data, alpha = 0, ...) {
   Bhat <- data$Bhat
   Shat <- data$Shat
   post_mean = post_sd = lfsr = matrix(nrow = nrow(Bhat), ncol= ncol(Bhat))
@@ -62,4 +61,3 @@
   return(output_list)
 }
 
-mash_1by1_vectorized <- memoise:: memoise(.mash_1by1_vectorized)

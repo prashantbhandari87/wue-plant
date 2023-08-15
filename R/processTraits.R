@@ -10,9 +10,8 @@
 #'
 #' @import tidyverse
 #' @import data.table
-#' @importFrom memoise memoise
 
-.processTraits <- function(project_code, x) {
+processTraits <- function(project_code, x) {
 
 
   # Check if the input is a data frame
@@ -69,4 +68,3 @@
   print("Files written out!")
 }
 
-processTraits <- memoise::memoise(.processTraits)
