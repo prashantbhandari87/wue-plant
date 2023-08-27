@@ -35,7 +35,7 @@ runGWASAnalysisEfficient3 <- function (bedfile, famFile, phenoFile, phenoCols, p
   covar <- PC[, 1:10]
   pheno <- read.csv(phenoFile, header = TRUE)
   colnames(pheno)[1] <- "genotype"
-  pheno <- pheno %>% select_if(~n_distinct(.) >= 50)
+  pheno <- pheno %>% select_if(~n_distinct(.) >= 5)
   read_tab_or_space_sep <- function(file_path) {
     con <- file(file_path, "r")
     first_line <- readLines(con, n = 1)

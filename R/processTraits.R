@@ -50,7 +50,11 @@ processTraits <- function(project_code, x) {
   write.csv(castedLT_100, file = paste(project_code, "T100_preblup_traits", sep = "_"), row.names = FALSE)
 
   # Calculate median values
-  median.x <- aggregate(. ~ genotype + day + treatment, x_df, median, na.rm = TRUE)
+  median.x <- x_df %>%
+    group_by(genotype, day, treatment) %>%
+    summarise(across(where(is.numeric), median))
+
+
   median.x <- median.x %>% select(-c(replicate))
 
   # Cast the median.x data frame
