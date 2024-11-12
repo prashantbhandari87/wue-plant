@@ -11,7 +11,7 @@
 #' @import tidyverse
 #' @import data.table
 
-analyzeWaterDataFixed <- function (water_data, predicted_pcv_data, project_code) {
+clean_water <- function (water_data, project_code) {
 
   if (is.data.frame(water_data)) {
     water_df <- water_data
@@ -67,32 +67,8 @@ analyzeWaterDataFixed <- function (water_data, predicted_pcv_data, project_code)
 
   water.join <- water_df %>% select(plantbarcode, genotype, day,
                                     treatment, replicate, water.amount.plus.dap)
-  sv2 <- predicted_pcv_data %>% mutate(day = 12 + DAP) %>%
-    select(-c(genotype, treatment, DAP))
-  joined1 <- left_join(water.join, sv2, by = c("plantbarcode",
-                                               "day"))
-  joined1 <- distinct(joined1)
-  joined1 <- joined1 %>% filter(day != 12)
-  joined1 <- joined1 %>% filter(water.amount.plus.dap > 0)
-  joined1 <- drop_na(joined1)
-  joined1$dailyWUE <- joined1$daily_area_diff_pred/joined1$water.amount.plus.dap
-  num_na <- sum(is.na(joined1$dailyWUE))
-  if (num_na > 0) {
-    cat("There are", num_na, "NA values in joined1$dailyWUE.\n")
-  }
-  else {
-    print("No NA values in joined1$dailyWUE.")
-  }
-  wue.fit.models <- joined1 %>% group_by(day) %>% do(mod = lm(daily_area_diff_pred ~
-                                                                water.amount.plus.dap, data = .))
-  m <- left_join(joined1, wue.fit.models, by = c("day"))
-  x <- m %>% group_by(day) %>%
-    do(add_predictions(., first(.$mod), var = "WUE.fit")) %>%
-    do(add_residuals(., first(.$mod), var = "WUE.resid")) %>%
-    select(-c(mod))
-  output_file <- paste(project_code, "large_plot_file.csv",
-                       sep = "_")
-  write.csv(x, file = output_file, row.names = FALSE)
-  return(x)
+
+
+  return(water.join)
 }
 

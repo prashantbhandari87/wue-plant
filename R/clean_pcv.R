@@ -16,7 +16,7 @@
 #' @import patchwork
 #' @import naniar
 
-processData <- function(sv_file, project_code) {
+clean_pcv <- function(sv_file, project_code) {
 
 
   tryCatch({
@@ -45,19 +45,25 @@ processData <- function(sv_file, project_code) {
                   timeCol = "timestamp", group = c("plantbarcode", "rotation"), plot = FALSE)
 
 
-    sv <- bw.outliers(sv, phenotype = "area.pixels", group = c("DAP", "genotype", "treatment"),
-                      plotgroup = c("plantbarcode", "rotation"))
+   # sv <- bw.outliers(sv, phenotype = "area.pixels", group = c("DAP", "genotype", "treatment"),
+   #                   plotgroup = c("plantbarcode", "rotation"))
+
+
+   # sv <- bw.outliers(sv, phenotype = "height_above_reference.pixels", group = c("DAP", "genotype", "treatment"),
+   #                   plotgroup = c("plantbarcode", "rotation"))
+
+
 
     phenotypes <- c('area.pixels', 'convex_hull_area.pixels', 'convex_hull_vertices',
                     'ellipse_angle.degrees', 'ellipse_eccentricity',
                     'ellipse_major_axis.pixels', 'ellipse_minor_axis.pixels',
-                    'height.pixels', 'hue_circular_mean.degrees',
+                    'height_above_reference.pixels', 'hue_circular_mean.degrees',
                     'hue_circular_std.degrees', 'hue_median.degrees',
                     'longest_path.pixels', 'perimeter.pixels', 'solidity',
                     'width.pixels')
 
     phenoForm <- paste0("cbind(", paste0(phenotypes, collapse = ", "), ")")
-    groupForm <- "DAP + plantbarcode + genotype + treatment"
+    groupForm <- "DAP + plantbarcode + genotype + treatment+timestamp"
     form <- as.formula(paste0(phenoForm, "~", groupForm))
 
     sv <- aggregate(form, data = sv, mean, na.rm = TRUE)
