@@ -1,9 +1,9 @@
 Package: sorghumWUE
-Title: Functions For Use In Bellweather Sorghum Runs
+Title: functions written for analyzing plant water use efficiency in a reproducible way
 Version: 0.1
 Authors@R: 
     person("Prashant", "Bhandari", , "prashantbhandarinepal@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0009-0000-8934-8844"))
 Description: Portable functions/workflow specialized for handling Sorghum data
 License: GPL (>= 3)
 Encoding: UTF-8
